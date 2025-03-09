@@ -1,17 +1,23 @@
+//UserController.java
 package com.calzada.oauth2login.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
-@RestController
+@Controller
 public class UserController {
 
     @GetMapping("/user-info")
-    public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User principal) {
-        return principal.getAttributes();
+    public String userInfo(@AuthenticationPrincipal OAuth2User principal, Model model) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("user", principal.getAttributes());
+        return "user-info";
     }
 }
+ 
